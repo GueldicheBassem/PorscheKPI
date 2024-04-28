@@ -1,0 +1,184 @@
+<div class="content">
+    <!-- Date, Shift, and Option Selection -->
+    <div class="row">
+      <!-- Date selection -->
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="selectedDate">Date</label>
+          <input type="date" class="form-control" id="selectedDate" [(ngModel)]="selectedDate">
+        </div>
+      </div>
+      <!-- Shift selection -->
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="selectedShift">Quart</label>
+          <select class="form-control" id="selectedShift" [(ngModel)]="selectedShift">
+            <option value="Équipe du Matin" style="color: black;">Équipe du Matin</option>
+            <option value="Équipe du Nuit" style="color: black;">Équipe du Nuit</option>
+          </select>
+        </div>
+      </div>
+      <!-- Option selection -->
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="selectedOption">Option</label>
+          <select class="form-control" id="selectedOption" [(ngModel)]="selectedOption">
+            <option value="Kosu" style="color: black;">Kosu</option>
+            <option value="Production Statistics" style="color: black;">Production Statistics</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Button to Fetch Shift Details -->
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <button class="btn btn-secondary" (click)="fetchShiftDetails()">Récupérer les détails</button>
+
+      </div>
+    </div>
+
+
+
+
+    <div class="row justify-content-center align-items-center" style="height: 50vh;"*ngIf="selectedOption==undefined || selectedShift==undefined || selectedDate==undefined">
+      <div class="col-md-8 text-center">
+        <h1 class="display-4" style="font-size: 1.3rem;">Rechercher des statistiques</h1>
+        <p>Veuillez sélectionner les informations que vous souhaitez rechercher.</p>
+      </div>
+    </div>
+  
+    <!-- Display Hourly Kosu Entries -->
+<div class="row" *ngIf="selectedOption === 'Kosu' && hourlyKosuEntries">
+    <!-- Table to display Kosu entries -->
+    <div class="col-md-12">
+      <h3>Kosu Horaire</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Ligne</th>
+            <th>Horaire</th>
+            <th>Groupe</th>
+            <th>Série</th>
+            <th>Temps</th>
+            <th>Ok</th>
+            <th>NOK</th>
+            <th>Effectif</th>
+            <th>Kosu Équivalent</th>
+            <th>Mudas</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let entry of hourlyKosuEntries">
+            <td>{{ entry.line }}</td>
+            <td>{{ entry.hour }}</td>
+            <td>{{ entry.group }}</td>
+            <td>{{ entry.serial }}</td>
+            <td>{{ entry.netWorkTime }}</td>
+            <td>{{ entry.producedCables }}</td>
+            <td>{{ entry.nokCables }}</td>
+            <td>{{ entry.workforce }}</td>
+            <td>{{ entry.equivalentKosu | number: '1.2-2' }}</td>
+            <td>{{ entry.mudas | number: '1.3-3' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  <!-- Display End of Shift Kosu Entries -->
+  <div class="row" *ngIf="selectedOption === 'Kosu' && endOfShiftKosu ">
+    <!-- Table to display End of Shift Kosu entries -->
+    <div class="col-md-12">
+      <h3>Fin de Quart Kosu</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Ligne</th>
+            <th>Série</th>
+            <th>Groupe</th>
+            <th>Temps Total</th>
+            <th>Ok Total</th>
+            <th>NOK Total</th>
+            <th>Effectif</th>
+            <th>Kosu Équivalent</th>
+            <th>Mudas Total</th>
+           
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let entry of endOfShiftKosu">
+            <td>{{ entry.line.lineName }}</td>
+            <td>{{ entry.serial.serialName }}</td>
+            <td>{{ entry.groupe.groupName}}</td>
+            <td>{{ entry.totalNetWorkTime }}</td>
+            <td>{{ entry.totalProducedCables }}</td>
+            <td>{{ entry.totalNokCables }}</td>
+            <td>{{ entry.workforce }}</td>
+            <td>{{ entry.averageKosuEquivalent | number: '1.2-2' }}</td>
+            <td>{{ entry.totalMudas | number: '1.3-3' }}</td>
+            
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  <!-- Display End of Shift Stats Entries -->
+<!-- Display End of Shift Stats Entries -->
+<div class="row" *ngIf="selectedOption === 'Production Statistics' && endOfShiftStatsEntries">
+    <div class="col-md-12">
+      <h3>End of Shift Statistics Entries</h3>
+      <div class="statistics-container">
+        <div class="row">
+          <div class="col-md-4" *ngFor="let entry of endOfShiftStatsEntries">
+            <div class="stats-box">
+              <div class="project-name">{{ entry.project.projectName }}</div>
+              <div class="stats">
+                <div class="stat-item">
+                  <div class="label">Effectif Present:</div>
+                  <div class="value">{{ entry.workforcePresent }}</div>
+                </div>
+                <div class="stat-item">
+                  <div class="label">Efficience:</div>
+                  <div class="value">{{ entry.efficiency }}</div>
+                </div>
+                <div class="stat-item">
+                  <div class="label">Nombre Produit:</div>
+                  <div class="value">{{ entry.producedNumber }}</div>
+                </div>
+                <div class="stat-item">
+                  <div class="label">Câblages NOK:</div>
+                  <div class="value">{{ entry.nokNumber }}</div>
+                </div>
+                <div class="stat-item">
+                  <div class="label">Dernier Câblage Produit:</div>
+                  <div class="value">{{ entry.date }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Display PPM Final and Average Efficiency -->
+<div class="row" *ngIf="selectedOption === 'Production Statistics' && ppmFinal && averageEfficiency">
+  <div class="col-md-6">
+    <h3>PPM Final</h3>
+    <div class="stats-box">
+      <div class="stat-item">
+        <div class="value">{{ ppmFinal | number: '1.2-2' }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <h3>Efficience Segment Final</h3>
+    <div class="stats-box">
+      <div class="stat-item">
+        <div class="value">{{ averageEfficiency | number: '1.2-2' }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+  

@@ -1,0 +1,399 @@
+        <div class="content">
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+              <div class="row " *ngIf="formDisabled">
+                <div class="col-md-4 col-sm-12">
+                  <div class="mb-3">
+                      <label for="selectedTeam">Date</label>
+                      <div class="text-center">
+                          <input type="date" [(ngModel)]="selectedDate" (ngModelChange)="onDateSelected()" class="form-control date-picker">
+                      </div>
+                  </div>
+              </div>
+                <div class="col-md-4 col-sm-12">
+                  <div class="form-group ">
+                      <label  for="selectedTeam">Équipe</label>
+                      <select class="form-control" id="selectedTeam" [(ngModel)]="selectedTeam" (change)="setSelectedTeam($event)">
+
+                          <option value="Équipe du Matin" style="color: black;">Équipe du Matin</option>
+                          <option value="Équipe du Nuit" style="color: black;">Équipe du Nuit</option>
+                      </select>
+                  </div>
+              </div>
+              
+              
+              
+              <div class="col-md-4 col-sm-12 mt-4"> <!-- Add mt-3 for top margin -->
+                <div class="text-center mb-3">
+                    <button class="btn btn-link text-secondary bg-gray" type="submit" (click)="startQuart()">Démarrer Quart</button>
+                </div>
+            </div>
+            
+              </div>
+            </div>
+            <div class="col-md-2"></div>
+
+          </div>
+          <!-- Add a big warning message if the Kosu form is disabled -->
+<div class="row justify-content-center align-items-center" style="height: 50vh;"*ngIf="formDisabled">
+  <div class="col-md-8 text-center">
+    <h1 class="display-4" style="font-size: 1.5rem;">Pas de Quart sélectionné</h1>
+    <p>Veuillez démarrer ou sélectionner un Quart.</p>
+  </div>
+</div>
+
+          
+          <div class="row justify-content-center mt-4" *ngIf="!formDisabled">
+            <div class="col-md-8">
+              <div class="card mb-4">
+                <div class="card-header bg-gray text-white">
+                  <h5 class="title text-center">Quart en cours</h5>
+                </div>
+                <div class="card-body">
+                  <p class="text-center mb-0">{{ selectedDate }} - {{ selectedTeam }}</p>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="title text-center">Remplir le Kosu horaire</h5>
+                </div>
+                <div class="card-body">
+                  <form >
+                    <!-- Quart En Cours Section -->
+          
+                    <div class="row">
+                      <div class="col-md-6 pr-md-1">
+                        <li ngbDropdown>
+                          <button
+                            class="btn btn-link"
+                            type="button"
+                            id="dropdownMenuButton"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                            ngbDropdownToggle
+                          >
+                            {{ selectedGroup }}
+                          </button>
+                          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" ngbDropdownMenu>
+                            <li *ngFor="let group of groupes">
+                              <a href="javascript:void(0)" ngbDropdownItem (click)="setSelectedGroup(group.groupName,group.groupId)">
+                                {{group.groupName}}
+                              </a>
+                            </li>
+                          </ul>
+                        </li>
+                      </div>
+                    
+                      <div class="col-md-6 pl-md-1 mt-2">
+                        <li ngbDropdown>
+                          <button
+                            class="btn btn-link"
+                            type="button"
+                            id="dropdownMenuButton"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                            ngbDropdownToggle
+                          >
+                            {{ selectedLine }}
+                          </button>
+                          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" ngbDropdownMenu>
+                            <li *ngFor="let line of lines">
+                              <a href="javascript:void(0)" ngbDropdownItem (click)="setSelectedLine(line.name, line.id)">
+                                {{ line.name }}
+                              </a>
+                            </li>
+                          </ul>
+                        </li>
+                      </div>
+                    </div>
+                    <div class="row mt-2">
+                      <div class="col-md-6 pr-md-1">
+                        <li ngbDropdown>
+                          <button
+                            class="btn btn-link"
+                            type="button"
+                            id="dropdownMenuButtonSerial"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                            ngbDropdownToggle
+                          >
+                            {{ selectedSerial }}
+                          </button>
+                          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonSerial" ngbDropdownMenu>
+                            <li *ngFor="let serial of serials">
+                              <a href="javascript:void(0)" ngbDropdownItem (click)="setSelectedSerial(serial.serialId,serial.serialName)">
+                                {{ serial.serialName }}
+                              </a>
+                            </li>
+                          </ul>
+                        </li>
+                      </div>
+                      
+                      <div class="col-md-6 pl-md-1 mt-2">
+                        <li ngbDropdown>
+                          <button
+                            class="btn btn-link"
+                            type="button"
+                            id="dropdownMenuButtonSerial"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                            ngbDropdownToggle
+                          >
+                            {{ selectedHour }}
+                          </button>
+                          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonSerial" ngbDropdownMenu>
+                            <li *ngFor="let hour of hours">
+                              <a href="javascript:void(0)" ngbDropdownItem (click)="setSelectedHour(hour)">
+                                {{ hour }}
+                              </a>
+                            </li>
+                          </ul>
+                        </li>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <!-- First two input fields side by side -->
+                      <div class="col-md-6 pr-md-1">
+                        <div class="form-group">
+                          <label>Temps Net de travail</label>
+                          <input class="form-control" type="number" [(ngModel)]="netWorkTime" required/>
+                        </div>
+                      </div>
+                      <div class="col-md-6 pl-md-1">
+                        <div class="form-group">
+                          <label>Nombre produit</label>
+                          <input class="form-control" type="number" [(ngModel)]="producedCables" required/>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="row">
+                      <!-- Second pair of input fields, one below the other -->
+                      <div class="col-md-6 pr-md-1">
+                        <div class="form-group">
+                          <label>NOK câblages</label>
+                          <input class="form-control" type="number" [(ngModel)]="nokCables" required/>
+                        </div>
+                      </div>
+                      <div class="col-md-6 pl-md-1">
+                        <div class="form-group">
+                          <label>Effectif Présent</label>
+                          <input class="form-control" type="number" [(ngModel)]="workforce" required/>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label>Kosu Objectif</label>
+                          <input class="form-control" type="number" [(ngModel)]="kosuobjectif" required/>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-footer">
+                      <div class="row justify-content-between align-items-center">
+                        <div class="col-md-4 text-center">
+                          <button class="btn btn-fill btn-danger" type="button" (click)="toggleTable()">Tableau</button>
+                        </div>
+                        <div class="col-md-4 text-center ">
+                          <!-- Timer Status Message -->
+                          
+                            <div class="card-body ">
+                              <h5 class="text-center mb-0">{{ timerStatusMessage }}</h5>
+                            
+                          </div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                          <button class="btn btn-fill btn-danger" type="button" (click)="refreshTable()" (click)="onSubmit()" [disabled]="!isFormValid()">Enregistrer</button>
+                        </div>
+                      </div>
+                    </div>
+          
+
+                    
+
+                  
+                    
+                    
+                  
+                  
+                    
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          
+          <!-- Table -->
+          <div class="row mt-4" *ngIf="showTable">
+            <div class="col-md-12">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <h4 class="card-title">Tableau Kosu Horaire</h4>
+                    
+                        <i class="tim-icons icon-refresh-02" (click)="refreshTable()" ></i>
+                      
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-full-width table-responsive">
+                      <table class="table tablesorter">
+                        <thead class="text-primary">
+                          <tr>
+                            
+                            <th>Ligne</th>
+                            <th>Horaire</th>
+                            <th>Groupe</th>
+                            <th>Série</th>
+                            <th>Temps</th>
+                            <th>Ok</th>
+                            <th>NOK</th>
+                            <th>Effectif</th>
+                            <th>Kosu Équivalent</th>
+                            <th>Mudas</th>
+                            <th *ngIf="editmode==true" >Kosu Objectif</th>
+                          
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <!-- Example data --> 
+                          <tr *ngFor="let entry of hourlyKosuEntries">
+
+    
+                              <td style="width: 10%;">
+                                  <!-- Display or edit mode based on editMode flag -->
+                                  <span *ngIf="!entry.editMode">{{ entry.line }}</span>
+                                  <li style="list-style: none;" *ngIf="entry.editMode" ngbDropdown>
+                                      <button class="btn btn-link" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
+                                          {{ selectedLine }}
+                                      </button>
+                                      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" ngbDropdownMenu>
+                                          <li *ngFor="let line of lines">
+                                              <a href="javascript:void(0)" ngbDropdownItem (click)="setSelectedLine(line.name, line.id)">
+                                                  {{ line.name }}
+                                              </a>
+                                          </li>
+                                      </ul>
+                                  </li>
+                              </td>
+                              <td style="width: 1%;">
+                                <!-- Display or edit mode based on editMode flag -->
+                                <span *ngIf="!entry.editMode">{{ entry.hour }}</span>
+                                <li style="list-style: none;" *ngIf="entry.editMode" ngbDropdown>
+                                  <button class="btn btn-link" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
+                                      {{ selectedHour }}
+                                  </button>
+                                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" ngbDropdownMenu>
+                                      <li *ngFor="let hour of hours">
+                                          <a href="javascript:void(0)" ngbDropdownItem (click)="setSelectedHour(hour)">
+                                              {{ hour }}
+                                          </a>
+                                      </li>
+                                  </ul>
+                              </li>
+                              </td>
+                              <td style="width: 15%;">
+                                  <!-- Display or edit mode based on editMode flag -->
+                                  <span *ngIf="!entry.editMode">{{ entry.group }}</span>
+                                  <li style="list-style: none;" *ngIf="entry.editMode" ngbDropdown>
+                                    <button class="btn btn-link" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
+                                        {{ selectedGroup }}
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" ngbDropdownMenu>
+                                        <li *ngFor="let group of groupes">
+                                            <a href="javascript:void(0)" ngbDropdownItem (click)="setSelectedGroup(group.groupName,group.groupId)">
+                                                {{ group.groupName }}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                              </td>
+                              <td style="width: 15%;">
+                                  <!-- Display or edit mode based on editMode flag -->
+                                  <span *ngIf="!entry.editMode">{{ entry.serial }}</span>
+                                  <li style="list-style: none;" *ngIf="entry.editMode" ngbDropdown>
+                                    <button class="btn btn-link" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
+                                        {{ selectedSerial }}
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" ngbDropdownMenu>
+                                        <li *ngFor="let serial of serials">
+                                            <a href="javascript:void(0)" ngbDropdownItem (click)="setSelectedSerial(serial.serialId,serial.serialName)">
+                                                {{ serial.serialName }}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                              </td>
+                              <td style="width: 10%;">
+                                  <!-- Display or edit mode based on editMode flag -->
+                                  <span *ngIf="!entry.editMode">{{ entry.netWorkTime }}</span>
+                                  <input *ngIf="entry.editMode" type="number" [(ngModel)]="netWorkTime" class="form-control" style="width: 50px;">
+                              </td>
+                              <td style="width: 10%;">
+                                  <!-- Display or edit mode based on editMode flag -->
+                                  <span *ngIf="!entry.editMode">{{ entry.producedCables }}</span>
+                                  <input *ngIf="entry.editMode" type="number" [(ngModel)]="producedCables" class="form-control" style="width: 50px;">
+                              </td>
+                              <td style="width: 10%;" >
+                                  <!-- Display or edit mode based on editMode flag -->
+                                  <span *ngIf="!entry.editMode">{{ entry.nokCables }}</span>
+                                  <input *ngIf="entry.editMode" type="number" [(ngModel)]="nokCables" class="form-control" style="width: 50px;">
+                              </td>
+                              <td style="width: 10%;" >
+                                  <!-- Display or edit mode based on editMode flag -->
+                                  <span *ngIf="!entry.editMode">{{ entry.workforce }}</span>
+                                  <input *ngIf="entry.editMode" type="number" [(ngModel)]="workforce" class="form-control" style="width: 50px;">
+                              </td>
+                              
+                            
+                            
+                              <td style="width: 5%;">{{ entry.equivalentKosu | number: '1.2-2' }}</td>
+                              <td style="width: 5%;">{{ entry.mudas | number: '1.3-3' }}</td>
+                              <td style="width: 10%;" *ngIf="entry.editMode" >
+                                <!-- Display or edit mode based on editMode flag -->
+                              
+                                <input  type="number" [(ngModel)]="kosuobjectifedit" class="form-control" style="width: 50px;">
+                            </td>
+                              <td style="width: 5%;">   
+                                  <!-- Button to toggle edit mode -->
+                                  <button *ngIf="!entry.editMode" class="btn btn-link" (click)="toggleEditMode(entry)" >
+                                      <i class="fas fa-cog"></i> <!-- Replace with your cog icon -->
+                                  </button>
+                                  
+                                  <!-- Button to save changes -->
+                                  <button *ngIf="entry.editMode" class="btn btn-link" (click)="saveChanges(entry)" click="fetchHourlyKosuEntries()" (click)="fetchHourlyKosuEntries()">
+                                      <i class="fas fa-check"></i> <!-- Replace with your check icon -->
+                                  </button>
+                              </td>
+
+                            
+                          </tr>
+                          <!-- End of example data -->
+                      </tbody>
+                      
+                      </table>
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          
+          
+          <div class="text-center mb-3" *ngIf="!formDisabled">
+            <button class="btn btn-link text-secondary" type="button" (click)="finishQuart()" >Finir Quart</button>
+
+          </div>
+          
+          
+        </div>

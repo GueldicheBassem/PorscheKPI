@@ -1,0 +1,42 @@
+<div class="content" style="background-image: url('assets/img/porschelogin.jpg'); background-size: cover; background-position: center; height: 100vh; display: flex; justify-content: center; align-items: center;">
+  <div class="container-fluid page-body-wrapper">
+    <div class="row justify-content-center">
+      <div class="content-wrapper ml-n2">
+        <div class="card col-lg-12" style="background-color: #131011; height: auto; position: relative;">
+          <!-- Add position: relative; to the card -->
+          <div class="card-body px-5 py-4"> <!-- Adjusted padding -->
+            <img style="position: absolute;
+            top: 10px; /* Adjust top position as needed */
+            right: 10px; /* Adjust right position as needed */
+            width: 50px; /* Adjust width as needed */
+            height: auto; /* Maintain aspect ratio */"
+            src="assets/img/leoni.png" alt="Leoni Logo" class="leoni-logo"> <!-- Add Leoni logo -->
+            <h3 class="card-title text-center mb-9">Login</h3> <!-- Adjusted margin -->
+            <form #loginForm="ngForm" (ngSubmit)="login(loginForm)">
+              <div class="form-group">
+                <label>Username *</label>
+                <input type="text" ngModel name="userName" id="userName" placeholder="Enter Username" class="form-control p_input">
+              </div>
+              <div class="form-group">
+                <label>Password *</label>
+                <input type="password" ngModel name="userPassword" id="userPassword" class="form-control">
+              </div>
+             
+           
+              <div class="text-center mb-3">
+                <button type="submit" value="Login" class="btn btn-block enter-btn bg-gray">Login</button>
+              </div>
+              <div class="text-danger mb-2" *ngIf="wrongCredentials">
+                Wrong username or password.
+              </div>
+              
+            </form>
+          </div>
+        </div>
+      </div>
+      <!-- content-wrapper ends -->
+    </div>
+    <!-- row ends -->
+  </div>
+  <!-- page-body-wrapper ends -->
+</div>

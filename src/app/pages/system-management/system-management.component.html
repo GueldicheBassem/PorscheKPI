@@ -1,0 +1,293 @@
+<!-- system-management.component.html -->
+
+<div class="content">
+  <div class="row">
+    <div class="col-md-12">
+      <h2 class="text-center">Gestion</h2>
+      <div class="d-flex justify-content-center mb-3">
+        <!-- Button to toggle form for adding projects -->
+        <button (click)="toggleForm('projects')" class="btn btn-secondary d-flex flex-column align-items-center me-2 mb-2" style="margin-right: 10px;">
+          Projets
+          <i class="tim-icons icon-bus-front-12"></i>
+        </button>
+        
+        <button (click)="toggleForm('groups')" class="btn btn-secondary d-flex flex-column align-items-center me-2 mb-2" style="margin-right: 10px;">
+          Groupes
+          <i class=" tim-icons icon-single-02"></i>
+        </button>
+        
+        <button (click)="toggleForm('lines')" class="btn btn-secondary d-flex flex-column align-items-center me-2 mb-2" style="margin-right: 10px;">
+          Lignes
+          <i class=" tim-icons icon-simple-delete"></i>
+        </button>
+        
+        <button (click)="toggleForm('serials')" class="btn btn-secondary d-flex flex-column align-items-center me-2 mb-2" style="margin-right: 10px;">
+          Séries
+          <i class="tim-icons icon-link-72"></i>
+        </button>
+      </div>
+      <hr>
+      <!-- Projects Section -->
+      <div *ngIf="activeForm === 'projects'">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex justify-content-center align-items-center">
+              <!-- Search bar for projects -->
+              <input type="text" class="form-control form-control-sm mb-2 me-2" style="width: 200px;" placeholder="Rechercher un projet..." [(ngModel)]="searchTerm">
+              <!-- Plus sign to toggle the form for creating a project -->
+              <button *ngIf="activeForm === 'projects'" (click)="toggleForm('createProject')" class="btn btn-link d-flex flex-column align-items-center mb-2">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+            <!-- List all projects -->
+            <div class="d-flex flex-column justify-content-center align-items-center">
+              <div *ngFor="let project of filteredProjects" class="d-flex justify-content-between align-items-center w-50 mb-2">
+                <div class="fs-3">{{ project.projectName }}</div>
+                <!-- Edit and delete icons for each project -->
+                <div>
+                  <button (click)="toggleForm('editProject', project)" class="btn btn-link me-2">
+                    <i class="fas fa-cog"></i>
+                  </button>
+                  <button *ngIf="project.projectId !== undefined" (click)="deleteProject(project.projectId)" class="btn btn-link">
+                    <i class="fas fa-trash"></i>
+                  </button>
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Groups Section -->
+      <div *ngIf="activeForm === 'groups'">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex justify-content-center align-items-center">
+              <!-- Search bar for groups -->
+              <input type="text" class="form-control form-control-sm mb-2 me-2" style="width: 200px;" placeholder="Rechercher un groupe..." [(ngModel)]="searchGroupTerm">
+              <!-- Plus sign to toggle the form for creating a group -->
+              <button *ngIf="activeForm === 'groups'" (click)="toggleForm('createGroup')" class="btn btn-link d-flex flex-column align-items-center mb-2">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+            <!-- List all groups -->
+            <div class="d-flex flex-column justify-content-center align-items-center">
+              <div *ngFor="let group of filteredGroups" class="d-flex justify-content-between align-items-center w-50 mb-2">
+                <div class="fs-3">{{ group.groupName }}</div>
+                <!-- Edit and delete icons for each group -->
+                <div>
+                  <button (click)="toggleForm('editGroup', group)" class="btn btn-link me-2">
+                    <i class="fas fa-cog"></i>
+                  </button>
+                  <button *ngIf="group.groupId !== undefined" (click)="deleteGroup(group.groupId)" class="btn btn-link">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Form for adding a new project -->
+      <div *ngIf="activeForm === 'createProject'" class="d-flex justify-content-center">
+        <form (ngSubmit)="submitProjectForm()">
+          <div class="form-group">
+            <label for="projectName">Nom du Projet:</label>
+            <input type="text" class="form-control" id="projectName" [(ngModel)]="newProject.projectName" placeholder="Entrer le nom du projet">
+          </div>
+          <button type="submit" class="btn btn-primary" [disabled]="!newProject.projectName">Enregistrer le Projet</button>
+        </form>
+      </div>
+      <!-- Form for editing a project -->
+      <div *ngIf="activeForm === 'editProject'" class="d-flex justify-content-center">
+        <form (ngSubmit)="updateProjectForm()">
+          <div class="form-group">
+            <label for="editProjectName">Nom du Projet:</label>
+            <input type="text" class="form-control" id="editProjectName" [(ngModel)]="editProject.projectName" placeholder="Entrer le nom du projet">
+          </div>
+          <button type="submit" class="btn btn-primary"[disabled]="!editProject.projectName">Mettre à Jour le Projet</button>
+        </form>
+      </div>
+      <!-- Form for adding a new group -->
+      <div *ngIf="activeForm === 'createGroup'" class="d-flex justify-content-center">
+        <form (ngSubmit)="submitGroupForm()">
+          <div class="form-group">
+            <label for="groupName">Nom du Groupe:</label>
+            <input type="text" class="form-control" id="groupName" [(ngModel)]="newGroup.groupName" placeholder="Entrer le nom du groupe">
+          </div>
+          <button type="submit" class="btn btn-primary"[disabled]="!newGroup.groupName">Enregistrer le Groupe</button>
+        </form>
+      </div>
+      <!-- Form for editing a group -->
+      <div *ngIf="activeForm === 'editGroup'" class="d-flex justify-content-center">
+        <form (ngSubmit)="updateGroupForm()">
+          <div class="form-group">
+            <label for="editGroupName">Nom du Groupe:</label>
+            <!-- Bind the editGroup object to input value -->
+            <input type="text" class="form-control" id="editGroupName" [(ngModel)]="editGroup.groupName" placeholder="Entrer le nom du groupe">
+          </div>
+          <button type="submit" class="btn btn-primary"[disabled]="!editGroup.groupName">Mettre à Jour le Groupe</button>
+        </form>
+      </div>
+
+      <div *ngIf="activeForm === 'lines'">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex justify-content-center align-items-center">
+              <!-- Search bar for lines -->
+              <input type="text" class="form-control form-control-sm mb-2 me-2" style="width: 200px;" placeholder="Rechercher une ligne..." [(ngModel)]="searchLineTerm">
+              <!-- Plus sign to toggle the form for creating a line -->
+              <button *ngIf="activeForm === 'lines'" (click)="toggleForm('createLine')" class="btn btn-link d-flex flex-column align-items-center mb-2">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+            <!-- List all lines -->
+            <div class="d-flex flex-column justify-content-center align-items-center">
+              <div *ngFor="let line of filteredLines" class="d-flex justify-content-between align-items-center w-50 mb-2">
+                <div class="fs-3">{{ line.lineName }}</div>
+                <!-- Edit and delete icons for each line -->
+                <div>
+                  <button (click)="toggleForm('editLine', line)" class="btn btn-link me-2">
+                    <i class="fas fa-cog"></i>  
+                  </button>
+                  <button *ngIf="line.lineId !== undefined" (click)="deleteLine(line.lineId)" class="btn btn-link">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="activeForm === 'createLine'" class="d-flex justify-content-center">
+        <form (ngSubmit)="submitLineForm()">
+          <div class="form-group">
+            <label for="lineName">Nom de la Ligne:</label>
+            <input type="text" class="form-control" id="lineName" [(ngModel)]="newLine.lineName" placeholder="Entrer le nom de la ligne">
+          </div>
+          <div class="form-group">
+            <label for="projectSelect">Projet:</label>
+            <!-- Dropdown to select project related to the line -->
+            <select class="form-control" id="projectSelect" [(ngModel)]="selectedProject">
+              <option style="color: black;" *ngFor="let project of projects" [ngValue]="project">{{ project.projectName }}</option>
+            </select>            
+          </div>
+          <button type="submit" class="btn btn-primary"[disabled]="!newLine.lineName">Enregistrer la Ligne</button>
+        </form>
+      </div>
+      
+     <!-- Form for editing a line -->
+     <div *ngIf="activeForm === 'editLine'" class="d-flex justify-content-center">
+      <form [formGroup]="editLineForm" (ngSubmit)="updateLineForm()">
+        <div class="form-group">
+          <label for="editLineName">Nom de la Ligne:</label>
+          <input type="text" class="form-control" id="editLineName" formControlName="lineName" placeholder="Entrer le nom de la ligne">
+          <div *ngIf="editLineForm.controls['lineName'].invalid && (editLineForm.controls['lineName'].dirty || editLineForm.controls['lineName'].touched)" class="text-danger">
+            Nom de la Ligne requis
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="editProjectSelect">Projet:</label>
+          <select class="form-control" id="editProjectSelect" formControlName="project" [compareWith]="compareProjects">
+            <option style="color: black;" *ngFor="let project of projects" [ngValue]="project">{{ project.projectName }}</option>
+          </select>
+          <div *ngIf="editLineForm.controls['project'].invalid && (editLineForm.controls['project'].dirty || editLineForm.controls['project'].touched)" class="text-danger">
+            Projet requis
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Mettre à Jour la Ligne</button>
+      </form>
+    </div>
+    
+
+      <div *ngIf="activeForm === 'serials'">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex justify-content-center align-items-center">
+              <!-- Search bar for serials -->
+              <input type="text" class="form-control form-control-sm mb-2 me-2" style="width: 200px;" placeholder="Rechercher une série..." [(ngModel)]="searchTerm">
+              <!-- Plus sign to toggle the form for creating a serial -->
+              <button *ngIf="activeForm === 'serials'" (click)="toggleForm('createSerial')" class="btn btn-link d-flex flex-column align-items-center mb-2">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+            <!-- List all serials -->
+            <div class="d-flex flex-column justify-content-center align-items-center">
+              <div *ngFor="let serial of filteredSerials" class="d-flex justify-content-between align-items-center w-50 mb-2">
+                <div class="fs-3">{{ serial.serialName }}</div>
+                <!-- Edit and delete icons for each serial -->
+                <div>
+                  <button (click)="toggleForm('editSerial', serial)" class="btn btn-link me-2">
+                    <i class="fas fa-cog"></i>
+                  </button>
+                  <button *ngIf="serial.serialId !== undefined" (click)="deleteSerial(serial.serialId)" class="btn btn-link">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Form for adding a new serial -->
+      <div *ngIf="activeForm === 'createSerial'" class="d-flex justify-content-center">
+        <form (ngSubmit)="submitSerialForm()">
+          <div class="form-group">
+            <label for="serialName">Nom de la Série:</label>
+            <input type="text" class="form-control" id="serialName" [(ngModel)]="newSerial.serialName" placeholder="Entrer le nom de la série">
+          </div>
+          <div class="form-group">
+            <label for="reference">Référence:</label>
+            <input type="text" class="form-control" id="reference" [(ngModel)]="newSerial.reference" placeholder="Entrer la référence">
+          </div>
+          <div class="form-group">
+            <label for="coefficient">Coefficient:</label>
+            <input type="number" class="form-control" id="coefficient" [(ngModel)]="newSerial.coefficient" placeholder="Entrer le coefficient">
+          </div>
+          <div class="form-group">
+            <label for="projectSelect">Projet:</label>
+            <select class="form-control" id="projectSelect" [(ngModel)]="selectedProject">
+                <option style="color: black;" *ngFor="let project of projects" [ngValue]="project">{{ project.projectName }}</option>
+            </select>
+        </div>
+          <button type="submit" class="btn btn-primary" [disabled]="!newSerial.coefficient || !newSerial.serialName || !selectedProject">Enregistrer la Série</button>
+        </form>
+      </div>
+      <div *ngIf="activeForm === 'editSerial'" class="d-flex justify-content-center">
+        <div *ngIf="activeForm === 'editSerial'" class="d-flex justify-content-center">
+          <form [formGroup]="editSerialForm" (ngSubmit)="updateSerialForm()">
+            <div class="form-group">
+              <label for="editSerialName">Nom de la Série:</label>
+              <input type="text" class="form-control" id="editSerialName" formControlName="serialName" placeholder="Entrer le nom de la série">
+              <div *ngIf="editSerialForm.controls['serialName'].invalid && (editSerialForm.controls['serialName'].dirty || editSerialForm.controls['serialName'].touched)" class="text-danger">
+                Nom de la Série requis
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="editReference">Référence:</label>
+              <input type="text" class="form-control" id="editReference" formControlName="reference" placeholder="Entrer la référence">
+            </div>
+            <div class="form-group">
+              <label for="editCoefficient">Coefficient:</label>
+              <input type="number" class="form-control" id="editCoefficient" formControlName="coefficient" placeholder="Entrer le coefficient">
+            </div>
+            <div class="form-group">
+              <label for="editProjectSelect">Projet:</label>
+              <select class="form-control" id="editProjectSelect" formControlName="project" [compareWith]="compareProjects">
+                <option style="color: black;" *ngFor="let project of projects" [ngValue]="project">{{ project.projectName }}</option>
+              </select>
+              <div *ngIf="editSerialForm.controls['project'].invalid && (editSerialForm.controls['project'].dirty || editSerialForm.controls['project'].touched)" class="text-danger">
+                Projet requis
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Mettre à Jour la Série</button>
+          </form>
+        </div>
+      </div>
+      
+      
+    
+    </div>
+  </div>
+</div>

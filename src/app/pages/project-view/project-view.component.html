@@ -1,0 +1,411 @@
+  <div class="content">
+    
+    <div class="card-body">
+      <form>
+          <div class="row justify-content-center">
+              <div class="col-md-4 col-sm-12">
+                  <div class="form-group">
+                      <label for="selectedProject">Projet</label>
+                      <select class="form-control" id="selectedProject" [(ngModel)]="selectedProject" (change)="setSelectedProject($event)">
+        
+                          <option style="color: black;"  *ngFor="let project of projects" [ngValue]="project">{{ project }}</option> <!-- Adjusted ngFor loop -->
+                      </select>
+                  </div>
+              </div>
+          </div>
+      </form>
+  </div>
+  
+
+    <!-- Show the following section only when a project is selected -->
+    <div class="row" *ngIf="selectedProject !== 'Projet'">
+
+      
+      
+          
+            <h4 class="card-title">Statistiques de Production pour {{ selectedProject }}</h4>
+
+      
+      
+      <!-- Four boxes section -->
+      <div class="col-md-12 mb-4">
+        <div class="row">
+          <div *ngIf="selectedProject === 'GT4RS'" class="col-xl-4 col-md-6 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-9">
+                    <div class="d-flex align-items-center align-self-start">
+                      <h3 class="mb-0">{{ project1Data.efficiency.toFixed(0)  }} %</h3>
+                      <p class="text-success ml-2 mb-0 font-weight-medium">Objective 90%</p>
+                    </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="icon icon-box-success">
+                      <span class="mdi mdi-arrow-top-right icon-item"></span>
+                    </div>
+                  </div>
+                </div>
+                <h6 class="text-muted font-weight-normal">Efficience</h6>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="selectedProject === 'B4T'" class="col-xl-4 col-md-6 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-9">
+                    <div class="d-flex align-items-center align-self-start">
+                      <h3 class="mb-0">{{ project2Data.efficiency.toFixed(0) }} %</h3>
+                      <p class="text-success ml-2 mb-0 font-weight-medium">Objective 114%</p>
+                    </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="icon icon-box-success">
+                      <span class="mdi mdi-arrow-top-right icon-item"></span>
+                    </div>
+                  </div>
+                </div>
+                <h6 class="text-muted font-weight-normal">Efficience</h6>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="selectedProject === '992'" class="col-xl-4 col-md-6 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-9">
+                    <div class="d-flex align-items-center align-self-start">
+                      <h3 class="mb-0">{{ project3Data.efficiency.toFixed(0) }} %</h3>
+                      <p class="text-success ml-2 mb-0 font-weight-medium">Objective 96%</p>
+                    </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="icon icon-box-success">
+                      <span class="mdi mdi-arrow-top-right icon-item"></span>
+                    </div>
+                  </div>
+                </div>
+                <h6 class="text-muted font-weight-normal">Efficience</h6>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="selectedProject === 'B6S' || selectedProject === '9A3'" class="col-xl-4 col-md-6 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-9">
+                    <div class="d-flex align-items-center align-self-start">
+                      <h3 class="mb-0">{{ project4Data.efficiency.toFixed(0) }} %</h3>
+                      <p class="text-success ml-2 mb-0 font-weight-medium">Objective 106%</p>
+                    </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="icon icon-box-success">
+                      <span class="mdi mdi-arrow-top-right icon-item"></span>
+                    </div>
+                  </div>
+                </div>
+                <h6 class="text-muted font-weight-normal">Efficience</h6>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="selectedProject === 'GT4RS'" class="col-xl-4 col-md-6 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-9">
+                    <div class="d-flex align-items-center align-self-start">
+                      <h3 class="mb-0">{{ project1Data.ppm.toFixed(4)}}</h3>
+                    
+                    </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="icon icon-box-success">
+                      <span class="mdi mdi-arrow-top-right icon-item"></span>
+                    </div>
+                  </div>
+                </div>
+                <h6 class="text-muted font-weight-normal">PPM</h6>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="selectedProject === 'B6S' || selectedProject === '9A3'" class="col-xl-4 col-md-6 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-9">
+                    <div class="d-flex align-items-center align-self-start">
+                      <h3 class="mb-0">{{ project4Data.ppm.toFixed(4)}}</h3>
+                
+                    </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="icon icon-box-success">
+                      <span class="mdi mdi-arrow-top-right icon-item"></span>
+                    </div>
+                  </div>
+                </div>
+                <h6 class="text-muted font-weight-normal">PPM</h6>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="selectedProject === 'B4T'" class="col-xl-4 col-md-6 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-9">
+                    <div class="d-flex align-items-center align-self-start">
+                      <h3 class="mb-0">{{ project2Data.ppm.toFixed(4)}}</h3>
+                  
+                    </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="icon icon-box-success">
+                      <span class="mdi mdi-arrow-top-right icon-item"></span>
+                    </div>
+                  </div>
+                </div>
+                <h6 class="text-muted font-weight-normal">PPM</h6>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="selectedProject === '992'" class="col-xl-4 col-md-6 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-9">
+                    <div class="d-flex align-items-center align-self-start">
+                      <h3 class="mb-0">{{ project3Data.ppm.toFixed(4)}}</h3>
+                      
+                    </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="icon icon-box-success">
+                      <span class="mdi mdi-arrow-top-right icon-item"></span>
+                    </div>
+                  </div>
+                </div>
+                <h6 class="text-muted font-weight-normal">PPM</h6>
+              </div>
+            </div>
+          </div>
+        
+         
+            <div *ngIf="selectedProject === 'GT4RS'" class="col-xl-4 col-md-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-9">
+                      <div class="d-flex align-items-center align-self-start">
+                        <h3 class="mb-0">{{ project1Data.rft.toFixed(0)}}%</h3>
+                      
+                      </div>
+                    </div>
+                    <div class="col-3">
+                      <div class="icon icon-box-success">
+                        <span class="mdi mdi-arrow-top-right icon-item"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <h6 class="text-muted font-weight-normal">RFT</h6>
+                </div>
+              </div>
+            </div>
+  
+            <div *ngIf="selectedProject === 'B6S' || selectedProject === '9A3'" class="col-xl-4 col-md-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-9">
+                      <div class="d-flex align-items-center align-self-start">
+                        <h3 class="mb-0">{{ project4Data.rft.toFixed(0)}}%</h3>
+                  
+                      </div>
+                    </div>
+                    <div class="col-3">
+                      <div class="icon icon-box-success">
+                        <span class="mdi mdi-arrow-top-right icon-item"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <h6 class="text-muted font-weight-normal">RFT</h6>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="selectedProject === 'B4T'" class="col-xl-4 col-md-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-9">
+                      <div class="d-flex align-items-center">
+                        <h3 class="mb-0">{{ project2Data.rft.toFixed(0)}}%</h3>
+                    
+                      </div>
+                    </div>
+                    <div class="col-3">
+                      <div class="icon icon-box-success">
+                        <span class="mdi mdi-arrow-top-right icon-item"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <h6 class="text-muted font-weight-normal">RFT</h6>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="selectedProject === '992'" class="col-xl-4 col-md-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-9">
+                      <div class="d-flex align-items-center align-self-start">
+                        <h3 class="mb-0">{{ project3Data.rft.toFixed(0)}}%</h3>
+                        
+                      </div>
+                    </div>
+                    <div class="col-3">
+                      <div class="icon icon-box-success">
+                        <span class="mdi mdi-arrow-top-right icon-item"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <h6 class="text-muted font-weight-normal">RFT</h6>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    
+
+      <!-- Chart section -->
+    
+  <div class="col-md-6">
+    <div class="card card-plain">
+      <div class="card-header">
+        <h4 class="card-title">Project Statistics</h4>
+      </div>
+      <div class="card-body">
+        <div class="table-full-width table-responsive" style="overflow: hidden;">
+          <table class="table tablesorter">
+            <thead class="text-primary">
+              <tr>
+                <th>Stat</th>
+                <th class="text-left">Value</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="selectedProject === 'GT4RS'">
+              <tr>
+                <td>Effectif Present</td>
+                <td class="text-left">{{ project1Data.workforcePresent }}</td>
+              </tr>
+              
+              <tr>
+                <td>Nombre Produit</td>
+                <td class="text-left">{{ project1Data.producedNumber }}</td>
+              </tr>
+              <tr>
+                <td>Nombre NOK</td>
+                <td class="text-left">{{ project1Data.nokNumber }}</td>
+              </tr>
+              <tr>
+                <td>Dernier Câblage</td>
+                <td class="text-left">{{ formatDate(project1Data.date) }}</td>
+              </tr>
+            </tbody>
+            <!-- Repeat this block for other projects -->
+            <tbody *ngIf="selectedProject === 'B4T'">
+              <tr>
+                <td>Effectif Present</td>
+                <td class="text-left">{{ project2Data.workforcePresent }}</td>
+              </tr>
+            
+              <tr>
+                <td>Nombre Produit</td>
+                <td class="text-left">{{ project2Data.producedNumber }}</td>
+              </tr>
+              <tr>
+                <td>Nombre NOK</td>
+                <td class="text-left">{{ project2Data.nokNumber }}</td>
+              </tr>
+              <tr>
+                <td>Dernier Câblage</td>
+                <td class="text-left">{{ formatDate(project2Data.date) }}</td>
+              </tr>
+            </tbody>
+            <!-- Repeat this block for other projects -->
+            <tbody *ngIf="selectedProject === '992'">
+              <tr>
+                <td>Effectif Present</td>
+                <td class="text-left">{{ project3Data.workforcePresent }}</td>
+              </tr>
+          
+              <tr>
+                <td>Nombre Produit</td>
+                <td class="text-left">{{ project3Data.producedNumber }}</td>
+              </tr>
+              <tr>
+                <td>Nombre NOK</td>
+                <td class="text-left">{{ project3Data.nokNumber }}</td>
+              </tr>
+              <tr>
+                <td>Dernier Câblage</td>
+                <td class="text-left">{{ formatDate(project3Data.date) }}</td>
+              </tr>
+            </tbody>
+            <tbody *ngIf="selectedProject === 'B6S' || selectedProject === '9A3'">
+              <tr>
+                <td>Effectif Present</td>
+                <td class="text-left">{{ project4Data.workforcePresent }}</td>
+              </tr>
+              
+              <tr>
+                <td>Nombre Produit</td>
+                <td class="text-left">{{ project4Data.producedNumber }}</td>
+              </tr>
+              <tr>
+                <td>Nombre NOK</td>
+                <td class="text-left">{{ project4Data.nokNumber }}</td>
+              </tr>
+              <tr>
+                <td>Dernier Câblage</td>
+                <td class="text-left">{{ formatDate(project4Data.date) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+      </div>
+      
+    </div>  
+  </div>
+  <!-- Chart section -->
+  <div class="col-lg-5 ml-lg-auto">
+    <div class="card card-chart bg-transparent border-0 shadow-none">
+      <div class="card-header bg-transparent">
+        <h5 class="card-category">Taux de Production</h5>
+        <h3 class="card-title">
+          <i class="tim-icons icon-send text-success"></i> Cablages Produits
+        </h3>
+      </div>
+      <div class="card-body bg-transparent">
+        <div class="chart-area">
+          <canvas id="StackedBars"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+    <!-- Placeholder section for when no project is selected -->
+    
+  </div>
+  <div class="row justify-content-md-center align-items-center" *ngIf="selectedProject === 'Projet'">
+    <div class="col-md-6 text-center">
+      <h2>Aucun projet sélectionné</h2> 
+      <p>Veuillez sélectionner un projet dans le menu déroulant pour voir les détails du projet.</p>
+    </div>
+  </div>
+</div>
+
+
